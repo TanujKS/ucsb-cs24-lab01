@@ -1,6 +1,6 @@
 // intlist.cpp
 // Implements class IntList
-// YOUR NAME(S), AND DATE
+// Tanuj Siripurapu, 1/12/2026
 
 #include "intlist.h"
 
@@ -9,64 +9,176 @@ using std::cout;
 
 // copy constructor
 IntList::IntList(const IntList& source) {
-    //IMPLEMENT THIS
+    head = nullptr;
+    tail = nullptr;
+    
+    if (source.head == nullptr) {
+        return; // source is empty
+    }
+    
+    // copy first node
+    head = new Node{source.head->info, nullptr};
+    tail = head;
+    
+    // copy remaining nodes
+    Node* curr = source.head->next;
+    while (curr) {
+        Node* newNode = new Node{curr->info, nullptr};
+        tail->next = newNode;
+        tail = newNode;
+        curr = curr->next;
+    }
 }
 
 // destructor deletes all nodes
 IntList::~IntList() {
-    //IMPLEMENT THIS
+    Node* curr = head;
+    while (curr) {
+        Node* temp = curr;
+        curr = curr->next;
+        delete temp;
+    }
 }
 
 
 // return sum of values in list
 int IntList::sum() const {
-    return 0; // REPLACE THIS NON-SOLUTION
+    int total = 0;
+    Node* curr = head;
+    while (curr) {
+        total += curr->info;
+        curr = curr->next;
+    }
+    return total;
 }
 
 // returns true if value is in the list; false if not
 bool IntList::contains(int value) const {
-    return false; // REPLACE THIS NON-SOLUTION
+    Node* curr = head;
+    while (curr) {
+        if (value == curr->info) {
+            return true;
+        }
+        curr = curr->next;
+    }
+    return false; 
 }
 
 // returns maximum value in list, or 0 if empty list
 int IntList::max() const {
-    return 0; // REPLACE THIS NON-SOLUTION
+    if (head == nullptr) {
+        return 0;
+    }
+    Node* curr = head;
+    int max = curr->info;
+    curr = curr->next; 
+
+    while (curr) {
+        if (curr->info > max) {
+            max = curr->info;
+        }
+        curr = curr->next;
+    }
+
+    return max; 
 }
 
 // returns average (arithmetic mean) of all values, or
 // 0 if list is empty
 double IntList::average() const {
-    return 0.0; // REPLACE THIS NON-SOLUTION
+    int total = 0;
+    int len = 0;
+    Node* curr = head;
+    while (curr) {
+        total += curr->info;
+        len++;
+        curr = curr->next;
+    }
+
+    if (len > 0) {
+        return total / len;
+    } else {
+        return 0.0;
+    }
 }
 
 // inserts value as new node at beginning of list
 void IntList::push_front(int value) {
-    // IMPLEMENT
+    Node* newHead = new Node{value, head};
+    head = newHead;
+    if (tail == nullptr) {
+        tail = newHead;
+    }
 }
 
 // append value at end of list
 void IntList::push_back(int value) {
-    // IMPLEMENT
- 
+    Node* newTail = new Node{value, nullptr};
+    if (tail == nullptr) {
+        // empty list
+        head = newTail;
+        tail = newTail;
+    } else {
+        tail->next = newTail;
+        tail = newTail;
+    }
 }
 
 // return count of values
 int IntList::count() const {
-   //IMPLEMENT THIS
-   return 0;
+   int len = 0;
+   Node* curr = head;
+   while (curr) {
+        len++;
+        curr = curr->next;
+   }
+   return len;
 }
 
 
 //Assignment operator should copy the list from the source
 //to this list, deleting/replacing any existing nodes
 IntList& IntList::operator=(const IntList& source){
-    //IMPLEMENT
+    if (this == &source) {
+        return *this;
+    }
+
+    // delete existing nodes
+    Node* curr = head;
+    while (curr) {
+        Node* temp = curr;
+        curr = curr->next;
+        delete temp;
+    }
+
+    // copy from source
+    head = nullptr;
+    tail = nullptr;
+    
+    if (source.head == nullptr) {
+        return *this; // source is empty
+    }
+    
+    // copy first node
+    head = new Node{source.head->info, nullptr};
+    tail = head;
+    
+    // copy remaining nodes
+    curr = source.head->next;
+    while (curr) {
+        Node* newNode = new Node{curr->info, nullptr};
+        tail->next = newNode;
+        tail = newNode;
+        curr = curr->next;
+    }
+
     return *this;
 }
 
 // constructor sets up empty list
 IntList::IntList(){ 
-    //IMPLEMENT THIS 
+    head = 0;
+    tail = 0;
 }
 
 
